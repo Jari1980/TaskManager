@@ -42,6 +42,10 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Make mvnw executable
+        working-directory: backend
+        run: chmod +x mvnw
+
       - name: Build backend
         working-directory: backend
         run: ./mvnw clean install
