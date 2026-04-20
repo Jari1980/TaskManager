@@ -21,11 +21,12 @@ public class Task {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    private int assignetUserId;
+    @ManyToOne
+    @JoinColumn(name = "assigned_user_id")
+    private User assignedUserId;
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private User createdBy;
-
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
