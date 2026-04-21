@@ -1,5 +1,3 @@
-import type {User} from "./user";
-
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "DONE";
 export type TaskPriority = "LOW" | "MEDIUM" | "HIGH";
 
@@ -10,7 +8,7 @@ export type Task = {
     status: TaskStatus;
     priority: TaskPriority;
     projectId: number;
-    assignedUser?: User;
-    createdBy: User;
+    assignedUser?: number;
+    createdBy: number;
     dueDate?: string;
 }
