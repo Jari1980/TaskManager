@@ -1,14 +1,35 @@
 import { useParams, Link } from "react-router-dom";
-import { mockTeams, mockProjects } from "../mock/data";
 import { routes } from "../router/routes";
+import { useEffect, useState } from "react";
+import { getTeamById } from "../api/teams";
+import { getProjectsByTeam } from "../api/projects";
+import type { Team } from "../types/team";
+import type { Project } from "../types/project";
 
 export default function TeamDetails() {
   const { teamId } = useParams<{ teamId: string }>();
-  const team = mockTeams.find((t) => t.id === Number(teamId));
-  if (!team) {
-    return <div>Team not found</div>;
-  }
-  const teamProjects = mockProjects.filter((p) => p.teamId === team.id);
+
+  const [team, setTeam] = useState<Team | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!teamId) return;
+
+    Promise.all([
+      getTeamById(Number(teamId)),
+      getProjectsByTeam(Number(teamId)),
+    ])
+      .then(([teamData, projectData]) => {
+        setTeam(teamData);
+        setProjects(projectData);
+      })
+      .finally(() => setLoading(false));
+  }, [teamId]);
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!team) return <div>Team not found</div>;
 
   return (
     <div>
@@ -17,10 +38,10 @@ export default function TeamDetails() {
 
       <h2>Projects</h2>
 
-      {teamProjects.length === 0 ? (
+      {projects.length === 0 ? (
         <p>No projects yet</p>
       ) : (
-        teamProjects.map((project) => (
+        projects.map((project) => (
           <div key={project.id}>
             <Link to={routes.project(team.id, project.id)}>{project.name}</Link>
           </div>

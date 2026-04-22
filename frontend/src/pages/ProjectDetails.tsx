@@ -1,6 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { mockProjects, mockTasks } from "../mock/data";
+import { mockProjects } from "../mock/data";
 import { routes } from "../router/routes";
+import { useEffect, useState } from "react";
+import { getTasksByProject } from "../api/tasks";
+import type { Task } from "../types/task";
 
 export default function ProjectDetails() {
   const { projectId, teamId } = useParams<{
@@ -10,11 +13,20 @@ export default function ProjectDetails() {
 
   const project = mockProjects.find((p) => p.id === Number(projectId));
 
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!projectId) return;
+
+    getTasksByProject(Number(projectId))
+      .then(setTasks)
+      .finally(() => setLoading(false));
+  }, [projectId]);
+
   if (!project) {
     return <div>Project not found</div>;
   }
-
-  const projectTasks = mockTasks.filter((t) => t.projectId === project.id);
 
   return (
     <div>
@@ -23,13 +35,16 @@ export default function ProjectDetails() {
 
       <h2>Tasks</h2>
 
-      {projectTasks.map((task) => (
-        <div key={task.id}>
-          <Link to={routes.task(Number(teamId), project.id, task.id)}>
-            {task.title}
-          </Link>
-        </div>
-      ))}
+      {loading && <p>Loading...</p>}
+
+      {!loading &&
+        tasks.map((task) => (
+          <div key={task.id}>
+            <Link to={routes.task(Number(teamId), project.id, task.id)}>
+              {task.title}
+            </Link>
+          </div>
+        ))}
     </div>
   );
 }
