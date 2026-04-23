@@ -1,5 +1,6 @@
 package com.collab.taskmanager.controller;
 
+import com.collab.taskmanager.dto.request.LoginUserRequest;
 import com.collab.taskmanager.dto.request.RegisterUserRequest;
 import com.collab.taskmanager.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,11 @@ public class AuthController {
     @PostMapping("/registerUser")
     public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterUserRequest req){
        return new ResponseEntity<>(authService.registerUser(req),HttpStatus.CREATED);
+    }
+
+    @PostMapping("/loginUser")
+    public ResponseEntity<String> loginUser(@Valid @RequestBody LoginUserRequest req){
+        return new ResponseEntity<>(authService.loginUser(req),HttpStatus.ACCEPTED);
     }
 
 }
