@@ -19,12 +19,14 @@ public class AuthService {
     private final UserRepo userRepo;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailService customUserDetailService;
 
-    public AuthService(Mapper mapper, UserRepo userRepo, JWTService jwtService, AuthenticationManager authenticationManager) {
+    public AuthService(Mapper mapper, UserRepo userRepo, JWTService jwtService, AuthenticationManager authenticationManager, CustomUserDetailService customUserDetailService) {
         this.mapper = mapper;
         this.userRepo = userRepo;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.customUserDetailService = customUserDetailService;
     }
 
     public String registerUser(RegisterUserRequest req) {
@@ -40,8 +42,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(req.email(), req.password())
         );
 
-        UserDetails userDetails = new UserPrinciple(userRepo.findByEmail(req.email())
-                .orElseThrow(() -> new UserNotFoundException(req.email())));
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(req.email());
         return jwtService.createToken(userDetails);
     }
 }
