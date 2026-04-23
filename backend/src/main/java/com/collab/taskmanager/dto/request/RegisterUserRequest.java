@@ -1,6 +1,7 @@
 package com.collab.taskmanager.dto.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
-public record RegisterUserRequest (@NotNull String name, @NotNull String email, @NotNull String password){
+
+public record RegisterUserRequest (@NotBlank String name, @NotBlank String email, @NotBlank String password){
 }
