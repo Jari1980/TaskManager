@@ -26,9 +26,6 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private String frontendUrl = "http://localhost:5173";  // url of the frontend
-
-
     // security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtFilterChain jwtFilterChain) {
@@ -36,11 +33,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         // these two endpoint will be permitted for every user, authenticated or not
-                        .requestMatchers("/welcome", "/api/register").permitAll()
+                        .requestMatchers("/welcome", "/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(
                         // stateless application
                         (session) ->
@@ -76,7 +73,7 @@ public class SecurityConfig {
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOrigins(List.of("http://localhost:3000"));//FE
+    config.setAllowedOrigins(List.of("http://localhost:5173"));//FE
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);
