@@ -33,7 +33,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         // these two endpoint will be permitted for every user, authenticated or not
-                        .requestMatchers("/welcome", "/auth/**").permitAll()
+                        .requestMatchers(
+                                "/welcome",
+                                "/auth/**",
+                                "/swagger-ui/**", //Swagger UI frontend
+                                "/v3/api-docs/**", //Provides OpenAPI JSON
+                                "/swagger-ui.html" //Legacy, redirect entry point
+                        ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
