@@ -1,34 +1,145 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../router/routes";
+import { useAuth } from "../context/AuthContext";
+import { loginUser } from "../api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  function handleLogin(e: React.FormEvent) {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    try {
+      // loginUser now returns just a string token
+      const token: string = await loginUser({ email, password });
 
-    //TODO: replace with real auth later
-    localStorage.setItem("isAuthenticated", "true");
+      // save token to localStorage
+      localStorage.setItem("authToken", token);
 
-    navigate(routes.dashboard());
-  }
+      // temporarily set a mock user until /me endpoint is ready
+      setUser({ name: "Mock User", email });
+
+      navigate("/");
+    } catch (err: any) {
+      setError(err.response?.data || err.message || "Login failed");
+    }
+  };
 
   return (
-    <div style={{ maxWidth: 400, margin: "100px auto" }}>
-      <h1>Login</h1>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "80vh",
+        padding: "20px",
+      }}
+    >
+      <form
+        onSubmit={handleLogin}
+        style={{
+          background: "var(--bg)",
+          border: "1px solid var(--border)",
+          borderRadius: "12px",
+          boxShadow: "var(--shadow)",
+          width: "100%",
+          maxWidth: "400px",
+          padding: "40px",
+          color: "var(--text)",
+        }}
+      >
+        <h1 style={{ color: "var(--text-h)", marginBottom: "24px" }}>Login</h1>
 
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email</label>
-          <input type="email" placeholder="email" />
+        <div style={{ marginBottom: "16px" }}>
+          <label
+            style={{ display: "block", marginBottom: "6px", fontWeight: 500 }}
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your email"
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              fontSize: "14px",
+              color: "var(--text)",
+              background: "var(--bg)",
+            }}
+          />
         </div>
 
-        <div>
-          <label>Password</label>
-          <input type="password" placeholder="password" />
+        <div style={{ marginBottom: "16px" }}>
+          <label
+            style={{ display: "block", marginBottom: "6px", fontWeight: 500 }}
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="your password"
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              fontSize: "14px",
+              color: "var(--text)",
+              background: "var(--bg)",
+            }}
+          />
         </div>
 
-        <button type="submit">Login</button>
+        {error && (
+          <p style={{ color: "red", marginBottom: "16px" }}>{error}</p>
+        )}
+
+        <button
+          type="submit"
+          style={{
+            width: "100%",
+            padding: "12px",
+            background: "var(--accent)",
+            color: "var(--bg)",
+            border: "none",
+            borderRadius: "8px",
+            fontWeight: 600,
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          Login
+        </button>
+
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            background: "var(--border)",
+            color: "var(--text)",
+            border: "none",
+            borderRadius: "8px",
+            marginTop: "12px",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          Back
+        </button>
       </form>
     </div>
   );

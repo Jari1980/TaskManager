@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 import { mockUser, mockTeams, mockProjects } from "../mock/data";
 import { routes } from "../router/routes";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
+  const { user } = useAuth();
+
   return (
     <div>
       <h1>Dashboard</h1>
 
-      <p>Welcome, {mockUser.name}</p>
+      <p>Welcome, {user?.name || "Guest"}</p>
 
       <h2>Your Teams</h2>
 
