@@ -1,5 +1,6 @@
 import { Outlet, NavLink, Link } from "react-router-dom";
 import { routes } from "../router/routes";
+import Navbar from "../components/Navbar";
 
 const navStyle = ({ isActive }: { isActive: boolean }) => ({
   fontWeight: isActive ? "bold" : "normal",
@@ -37,28 +38,7 @@ export default function AppLayout() {
       {/* Main area */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         {/* Navbar */}
-        <header
-          style={{
-            padding: 12,
-            borderBottom: "1px solid #ddd",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div style={{ fontWeight: "bold" }}>Task Manager</div>
-
-          <Link
-            to={routes.login()}
-            style={{
-              color: "#d11a2a",
-              textDecoration: "none",
-              fontWeight: 500,
-            }}
-          >
-            Logout
-          </Link>
-        </header>
+        <Navbar />
 
         {/* Page content */}
         <main style={{ padding: 16, flex: 1 }}>
