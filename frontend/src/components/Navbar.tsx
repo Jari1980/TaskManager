@@ -1,51 +1,72 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { routes } from "../router/routes";
+import "./Navbar.css";
+import { useTheme } from "../context/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+    navigate(routes.home(), { replace: true });
   };
 
   return (
-    <header
-      style={{
-        padding: 12,
-        borderBottom: "1px solid #ddd",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ fontWeight: "bold" }}>
-        Task Manager {user ? `- Welcome, ${user.name}` : "- Guest"}
+    <header className="navbar">
+      <div className="navbar-title">
+        Task Manager {user ? `- ${user.name}` : "- Guest"}
       </div>
 
+      <div>
+        <button
+          onClick={toggleTheme}
+          style={{
+            marginRight: 12,
+            background: "transparent",
+            border: "1px solid var(--border)",
+            borderRadius: 6,
+            padding: "4px 8px",
+            cursor: "pointer",
+            color: "var(--text)",
+          }}
+        >
+          {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
+        </button>
+      </div>
       <div>
         {user ? (
           <button
             onClick={handleLogout}
             style={{
-              color: "#d11a2a",
-              fontWeight: 500,
+              padding: "8px 12px",
+              borderRadius: 8,
+              border: "1px solid var(--border)",
               background: "transparent",
-              border: "none",
+              color: "var(--text)",
               cursor: "pointer",
+              transition: "0.2s",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = "var(--accent-bg)";
+              e.currentTarget.style.color = "var(--accent)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--text)";
             }}
           >
             Logout
           </button>
         ) : (
           <>
-            <Link
-              to={routes.login()}
-              style={{ marginRight: 8, textDecoration: "none" }}
-            >
+            <Link to={routes.login()} className="navbar-link">
               Login
             </Link>
-            <Link to={routes.register()} style={{ textDecoration: "none" }}>
+            <Link to={routes.register()} className="navbar-link">
               Register
             </Link>
           </>
