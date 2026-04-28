@@ -10,47 +10,55 @@ import Register from "../pages/Register";
 import { AuthProvider } from "../context/AuthContext";
 import AuthLayout from "../layouts/AuthLayout";
 import { routes } from "../router/routes";
+import { ThemeProvider } from "../context/ThemeContext";
+import Home from "../pages/Home";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Public */}
-          <Route element={<AuthLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route
-              element={
-                <AuthLayout
-                  bottomLink={{
-                    text: "Already have an account? Login",
-                    to: routes.login(),
-                  }}
-                />
-              }
-            >
-              <Route path="/register" element={<Register />} />
+        <ThemeProvider>
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<Home />} />
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<Login />} />
+              <Route
+                element={
+                  <AuthLayout
+                    bottomLink={{
+                      text: "Already have an account? Login",
+                      to: routes.login(),
+                    }}
+                  />
+                }
+              >
+                <Route path="/register" element={<Register />} />
+              </Route>
             </Route>
-          </Route>
 
-          {/* Protected Layout */}
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Dashboard />} />
+            {/* Protected Layout */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route path="/teams" element={<Teams />} />
-            <Route path="/teams/:teamId" element={<TeamDetails />} />
+                <Route path="/teams" element={<Teams />} />
+                <Route path="/teams/:teamId" element={<TeamDetails />} />
 
-            <Route
-              path="/teams/:teamId/projects/:projectId"
-              element={<ProjectDetails />}
-            />
+                <Route
+                  path="/teams/:teamId/projects/:projectId"
+                  element={<ProjectDetails />}
+                />
 
-            <Route
-              path="/teams/:teamId/projects/:projectId/tasks/:taskId"
-              element={<TaskDetails />}
-            />
-          </Route>
-        </Routes>
+                <Route
+                  path="/teams/:teamId/projects/:projectId/tasks/:taskId"
+                  element={<TaskDetails />}
+                />
+              </Route>
+            </Route>
+          </Routes>
+        </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
   );

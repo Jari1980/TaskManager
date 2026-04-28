@@ -23,7 +23,7 @@ export default function Login() {
       // temporarily set a mock user until /me endpoint is ready
       setUser({ name: "Mock User", email });
 
-      navigate("/");
+      navigate("/dashboard", { replace: true });
     } catch (err: any) {
       setError(err.response?.data || err.message || "Login failed");
     }
