@@ -44,4 +44,6 @@ public class AuthService {
         UserDetails userDetails = customUserDetailService.loadUserByUsername(req.email());
         return jwtService.createToken(userDetails);
     }
+
+
 }
