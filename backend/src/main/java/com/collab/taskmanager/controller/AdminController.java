@@ -4,6 +4,7 @@ import com.collab.taskmanager.dto.request.ChangeUserRoleRequest;
 import com.collab.taskmanager.dto.response.GetUserResponse;
 import com.collab.taskmanager.service.AdminService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
+@Tag(name = "Admin", description = "Administration endpoints")
 public class AdminController {
 
     private final AdminService adminService;
