@@ -36,4 +36,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(e.getMessage());
     }
+    @ExceptionHandler(UserAlreadyAdminException.class)
+    public ResponseEntity<String> handlerUserAlreadyAdmin(UserAlreadyAdminException e) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
+    }
+    @ExceptionHandler(UserIsNotAdmin.class)
+    public ResponseEntity<String> handlerUserIsNotAdmin(UserIsNotAdmin e) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
+    }
 }
