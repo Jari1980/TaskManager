@@ -16,8 +16,49 @@
   text-decoration: none;
   color: var(--text);
   margin-left: 8px;
+
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.2s;
+
+  display: inline-flex;
+  align-items: center;
 }
 
 .navbar-link:hover {
+  background: var(--accent-bg);
   color: var(--accent);
+}
+
+.navbar-button {
+  all: unset;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.2s;
+
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1;
+
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+.navbar-button:hover {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.navbar-button:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

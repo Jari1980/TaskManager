@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { loginUser } from "../api/auth";
+import MatrixBackground from "../components/MatrixBackground";
+import { getMe } from "../api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,8 +22,9 @@ export default function Login() {
       // save token to localStorage
       localStorage.setItem("authToken", token);
 
-      // temporarily set a mock user until /me endpoint is ready
-      setUser({ name: "Mock User", email });
+      //Get user
+      const user = await getMe(); //Mock for now
+      setUser(user);
 
       navigate("/dashboard", { replace: true });
     } catch (err: any) {
@@ -39,6 +42,7 @@ export default function Login() {
         padding: "20px",
       }}
     >
+      <MatrixBackground />
       <form
         onSubmit={handleLogin}
         style={{
@@ -52,7 +56,9 @@ export default function Login() {
           color: "var(--text)",
         }}
       >
-        <h1 style={{ color: "var(--text-h)", marginBottom: "24px" }}>Login</h1>
+        <h1 className="modified-title" style={{ fontSize: "80px" }}>
+          Login
+        </h1>
 
         <div style={{ marginBottom: "16px" }}>
           <label
@@ -102,9 +108,7 @@ export default function Login() {
           />
         </div>
 
-        {error && (
-          <p style={{ color: "red", marginBottom: "16px" }}>{error}</p>
-        )}
+        {error && <p style={{ color: "red", marginBottom: "16px" }}>{error}</p>}
 
         <button
           type="submit"
@@ -125,7 +129,7 @@ export default function Login() {
 
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
           style={{
             width: "100%",
             padding: "12px",

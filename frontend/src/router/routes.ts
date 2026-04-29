@@ -3,6 +3,7 @@ export const routes = {
   dashboard: () => "/dashboard",
   register: () => "register",
   login: () => "/login",
+
   teams: () => "/teams",
   team: (teamId: number | string) => `/teams/${teamId}`,
   project: (teamId: number | string, projectId: number | string) =>
@@ -13,4 +14,6 @@ export const routes = {
     taskId: number | string
   ) =>
     `/teams/${teamId}/projects/${projectId}/tasks/${taskId}`,
+
+    admin: () => "/admin",
 };

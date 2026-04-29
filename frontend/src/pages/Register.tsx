@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../router/routes";
+import MatrixBackground from "../components/MatrixBackground";
+
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -24,26 +26,48 @@ export default function Register() {
 
   return (
     <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <MatrixBackground />
+      <h1 className="modified-title" style={{ fontSize:"80px" }}>Register</h1>
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column", gap: 12 }}
+      >
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
-          style={{ padding: 10, borderRadius: 4, border: "1px solid #ccc", background: "#1f2028", color: "#f3f4f6" }}
+          style={{
+            padding: 10,
+            borderRadius: 4,
+            border: "1px solid #ccc",
+            background: "#1f2028",
+            color: "#f3f4f6",
+          }}
         />
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
-          style={{ padding: 10, borderRadius: 4, border: "1px solid #ccc", background: "#1f2028", color: "#f3f4f6" }}
+          style={{
+            padding: 10,
+            borderRadius: 4,
+            border: "1px solid #ccc",
+            background: "#1f2028",
+            color: "#f3f4f6",
+          }}
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          style={{ padding: 10, borderRadius: 4, border: "1px solid #ccc", background: "#1f2028", color: "#f3f4f6" }}
+          style={{
+            padding: 10,
+            borderRadius: 4,
+            border: "1px solid #ccc",
+            background: "#1f2028",
+            color: "#f3f4f6",
+          }}
         />
         <button
           type="submit"
@@ -60,7 +84,7 @@ export default function Register() {
         </button>
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
           style={{
             padding: 10,
             borderRadius: 4,

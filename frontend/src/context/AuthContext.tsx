@@ -1,13 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import type { User } from "../types/user";
+import { getMe } from "../api/auth";
 
-//Using this temporary until we get me endpoint, when user registers we save name to display
-//If user loggs in we use mock name
-
-interface User {
-  name: string;
-  email: string;
-}
 
 interface AuthContextType {
   user: User | null;
@@ -24,6 +19,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("authToken");
     setUser(null);
   };
+
+  //Load user on app start
+  useEffect(() => {
+    const init = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+
+      try {
+        const me = await getMe(); //Currently mocked
+        setUser(me);
+      } catch (err) {
+        console.error("Failed to fetch user", err);
+        logout();
+      }
+    };
+
+    init();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout }}>
