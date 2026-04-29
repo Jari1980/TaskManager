@@ -22,23 +22,14 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @ApiResponse(responseCode = "201", description = "Admin create successful")
+    @ApiResponse(responseCode = "204", description = "The role was successfully changed.")
     @ApiResponse(responseCode = "401", description = "Unauthorized - user is not authenticated")
     @ApiResponse(responseCode = "403", description = "Forbidden - user does not have ADMIN role")
-    @PostMapping("/makeAdmin")
+    @PutMapping("/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> promoteUserToAdmin(@Valid @RequestBody ChangeUserRoleRequest req){
-        adminService.promoteUserToAdmin(req);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-    @ApiResponse(responseCode = "201", description = "The change from admin to user was successful.")
-    @ApiResponse(responseCode = "401", description = "Unauthorized - user is not authenticated")
-    @ApiResponse(responseCode = "403", description = "Forbidden - user does not have ADMIN role")
-    @PostMapping("/unMakeAdmin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> demoteAdminToUser(@Valid @RequestBody ChangeUserRoleRequest req){
-        adminService.demoteAdminToUser(req);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Void> changeUserRole(@PathVariable("id") Long id, @Valid @RequestBody ChangeUserRoleRequest req){
+        adminService.changeUserRole(id,req.role());
+        return ResponseEntity.noContent().build();
     }
 
     @ApiResponse(responseCode = "200", description = "Users have been successfully shown")
