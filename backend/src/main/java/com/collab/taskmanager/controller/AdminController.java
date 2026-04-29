@@ -6,6 +6,7 @@ import com.collab.taskmanager.service.AdminService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class AdminController {
     @ApiResponse(responseCode = "403", description = "Forbidden - user does not have ADMIN role")
     @GetMapping("/getUsers")// /getUsers?page=0&size=5 - will return first page with 5 users
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<GetUserResponse>> getAllUsers(Pageable pageable){
+    public ResponseEntity<Page<GetUserResponse>> getAllUsers(@ParameterObject Pageable pageable){
         return ResponseEntity.ok(adminService.getAllUsers(pageable));
     }
     @ApiResponse(responseCode = "200", description = "User deleted")
