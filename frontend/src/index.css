@@ -251,3 +251,67 @@ code {
   background: var(--accent-bg);
   color: var(--accent);
 }
+
+/* Admin Control */
+
+.admin-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.admin-controls select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-controls select:hover {
+  border-color: var(--accent);
+}
+
+/* Adminn pagination */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: var(--text-h);
+  font-weight: 500;
+}

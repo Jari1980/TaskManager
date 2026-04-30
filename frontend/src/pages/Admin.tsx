@@ -6,6 +6,10 @@ export default function Admin() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+
   const handleToggleRole = async (user: User) => {
     const newRole: Role = user.role === "ADMIN" ? "USER" : "ADMIN";
 
@@ -19,8 +23,9 @@ export default function Admin() {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      const data = await getUsers();
-      setUsers(data);
+      const data = await getUsers(currentPage, pageSize);
+      setUsers(data.users);
+      setTotalPages(data.totalPages);
     } finally {
       setLoading(false);
     }
@@ -28,13 +33,18 @@ export default function Admin() {
 
   const handleDelete = async (id: number) => {
     await deleteUser(id);
+    if (users.length === 1 && currentPage > 0) {
+      setCurrentPage((p) => p - 1);
+    } else {
+      loadUsers();
+    }
 
-    setUsers((prev) => prev.filter((u) => u.id !== id));
+    //setUsers((prev) => prev.filter((u) => u.id !== id));
   };
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [currentPage, pageSize]);
 
   if (loading) return <p>Loading users...</p>;
 
@@ -43,6 +53,20 @@ export default function Admin() {
       <h1 className="admin-title">Admin Panel</h1>
       <h1 className="adminSub-title">Users</h1>
 
+      <div className="admin-controls">
+        <label>Users per page: </label>
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+            setCurrentPage(0);
+          }}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+        </select>
+      </div>
       <table className="admin-table">
         <thead>
           <tr>
@@ -78,6 +102,25 @@ export default function Admin() {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
+          disabled={currentPage === 0}
+        >
+          Previous
+        </button>
+
+        <span>
+          Page {currentPage + 1} of {totalPages}
+        </span>
+
+        <button
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages - 1))}
+          disabled={currentPage >= totalPages - 1}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }
