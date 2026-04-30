@@ -13,6 +13,9 @@ import { routes } from "../router/routes";
 import { ThemeProvider } from "../context/ThemeContext";
 import Home from "../pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
+import Admin from "../pages/Admin";
+import AdminRoute from "./AdminRoute";
+import AdminLayout from "../layouts/AdminLayout";
 
 export default function AppRouter() {
   return (
@@ -55,6 +58,12 @@ export default function AppRouter() {
                   path="/teams/:teamId/projects/:projectId/tasks/:taskId"
                   element={<TaskDetails />}
                 />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route element={<AdminLayout />}>
+                  <Route path="/admin" element={<Admin />} />
+                </Route>
               </Route>
             </Route>
           </Routes>

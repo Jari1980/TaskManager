@@ -3,16 +3,21 @@ import { useAuth } from "../context/AuthContext";
 import { routes } from "../router/routes";
 import "./Navbar.css";
 import { useTheme } from "../context/ThemeContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith("/admin");
 
   const handleLogout = () => {
     logout();
-    navigate(routes.home(), { replace: true });
+    //small delay to ensure state clears so user gets back to login screen
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 0);
   };
 
   return (
@@ -38,27 +43,26 @@ export default function Navbar() {
         </button>
       </div>
       <div>
-        {user ? (
-          <button
-            onClick={handleLogout}
-            style={{
-              padding: "8px 12px",
-              borderRadius: 8,
-              border: "1px solid var(--border)",
-              background: "transparent",
-              color: "var(--text)",
-              cursor: "pointer",
-              transition: "0.2s",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "var(--accent-bg)";
-              e.currentTarget.style.color = "var(--accent)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "var(--text)";
-            }}
+        {location.pathname === "/admin" && (
+          <Link
+            to={routes.dashboard()}
+            className="navbar-button"
+            style={{ marginRight: 12 }}
           >
+            Back to App
+          </Link>
+        )}
+        {user?.role === "ADMIN" && !isAdminPage && (
+          <Link
+            to={routes.admin()}
+            className="navbar-button"
+            style={{ marginRight: 12 }}
+          >
+            Admin Panel
+          </Link>
+        )}
+        {user ? (
+          <button onClick={handleLogout} className="navbar-button">
             Logout
           </button>
         ) : (
