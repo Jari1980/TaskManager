@@ -2,6 +2,7 @@ package com.collab.taskmanager.service;
 
 import com.collab.taskmanager.dto.response.GetMeResponse;
 import com.collab.taskmanager.entities.User;
+import com.collab.taskmanager.exceptions.UserNotFoundException;
 import com.collab.taskmanager.repos.UserRepo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class UserService {
         String email = authentication.getName();
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new UserNotFoundException(email));
 
         return new GetMeResponse(
                 user.getId(),

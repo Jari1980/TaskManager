@@ -47,6 +47,7 @@ public class AdminController {
     @ApiResponse(responseCode = "200", description = "User found")
     @ApiResponse(responseCode = "401", description = "Unauthorized - user is not authenticated")
     @ApiResponse(responseCode = "403", description = "Forbidden - user does not have ADMIN role")
+    @ApiResponse(responseCode = "404", description = "User not found")
     @GetMapping("/getUserById/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable("id") Long id){
