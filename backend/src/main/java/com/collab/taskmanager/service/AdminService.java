@@ -41,6 +41,19 @@ public class AdminService {
                 ));
     }
 
+    public GetUserResponse getUserById(Long id){
+
+        User user = userRepo.findById(id)
+                .orElseThrow( () -> new UserNotFoundException(id));
+
+        return new GetUserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
     public void deleteUserById(Long id){
         User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User with this id: " + id + " not found"));
         userRepo.delete(user);
