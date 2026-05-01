@@ -43,6 +43,17 @@ public class AdminController {
     public ResponseEntity<Page<GetUserResponse>> getAllUsers(@ParameterObject Pageable pageable){
         return ResponseEntity.ok(adminService.getAllUsers(pageable));
     }
+
+    @ApiResponse(responseCode = "200", description = "User found")
+    @ApiResponse(responseCode = "401", description = "Unauthorized - user is not authenticated")
+    @ApiResponse(responseCode = "403", description = "Forbidden - user does not have ADMIN role")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @GetMapping("/getUserById/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<GetUserResponse> getUserById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(adminService.getUserById(id));
+    }
+
     @ApiResponse(responseCode = "200", description = "User deleted")
     @ApiResponse(responseCode = "401", description = "Unauthorized - user is not authenticated")
     @ApiResponse(responseCode = "403", description = "Forbidden - user does not have ADMIN role")
