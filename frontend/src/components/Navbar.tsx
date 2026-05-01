@@ -11,6 +11,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith("/admin");
+  const isAboutPage = location.pathname === routes.about();
 
   const handleLogout = () => {
     logout();
@@ -43,6 +44,23 @@ export default function Navbar() {
         </button>
       </div>
       <div>
+        {isAboutPage ? (
+          <Link
+            to={routes.dashboard()}
+            className="navbar-button"
+            style={{ marginRight: 12 }}
+          >
+            Home
+          </Link>
+        ) : (
+          <Link
+            to={routes.about()}
+            className="navbar-button"
+            style={{ marginRight: 12 }}
+          >
+            About
+          </Link>
+        )}
         {location.pathname === "/admin" && (
           <Link
             to={routes.dashboard()}

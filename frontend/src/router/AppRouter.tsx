@@ -16,6 +16,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import Admin from "../pages/Admin";
 import AdminRoute from "./AdminRoute";
 import AdminLayout from "../layouts/AdminLayout";
+import AboutLayout from "../layouts/AboutLayout";
+import About from "../pages/About";
 
 export default function AppRouter() {
   return (
@@ -25,6 +27,9 @@ export default function AppRouter() {
           <Routes>
             {/* Public */}
             <Route path="/" element={<Home />} />
+            <Route element={<AboutLayout />}>
+              <Route path="/about" element={<About />} />
+            </Route>
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
               <Route
