@@ -8,19 +8,15 @@ export const api = axios.create({
 });
 
 //Request interceptor to attach token
-api.interceptors.request.use(
-  (config) => {
-    //Public endpoints where token is not needed
-    const publicPaths = ["/auth/registerUser", "/auth/loginUser"];
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("authToken");
 
-    //Token attached to all other endpoints
-    if (!publicPaths.includes(config.url || "")) {
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+  const publicPaths = ["/auth/registerUser", "/auth/loginUser"];
+  const isPublic = publicPaths.includes(config.url || "");
+
+  if (!isPublic && token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});

@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { loginUser } from "../api/auth";
 import MatrixBackground from "../components/MatrixBackground";
-import { getMe } from "../api/auth";
+
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -16,16 +15,7 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     try {
-      // loginUser now returns just a string token
-      const token: string = await loginUser({ email, password });
-
-      // save token to localStorage
-      localStorage.setItem("authToken", token);
-
-      //Get user
-      const user = await getMe(); //Mock for now
-      setUser(user);
-
+      await login(email, password);
       navigate("/dashboard", { replace: true });
     } catch (err: any) {
       setError(err.response?.data || err.message || "Login failed");
