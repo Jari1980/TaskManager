@@ -10,6 +10,8 @@ export default function Admin() {
   const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+
   const handleToggleRole = async (user: User) => {
     const newRole: Role = user.role === "ADMIN" ? "USER" : "ADMIN";
 
@@ -38,8 +40,20 @@ export default function Admin() {
     } else {
       loadUsers();
     }
+  };
 
-    //setUsers((prev) => prev.filter((u) => u.id !== id));
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
+
+    await deleteUser(userToDelete.id);
+
+    if (users.length === 1 && currentPage > 0) {
+      setCurrentPage((p) => p - 1);
+    } else {
+      loadUsers();
+    }
+
+    setUserToDelete(null);
   };
 
   useEffect(() => {
@@ -92,7 +106,7 @@ export default function Admin() {
 
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(u.id)}
+                    onClick={() => setUserToDelete(u)}
                   >
                     Delete
                   </button>
@@ -121,6 +135,27 @@ export default function Admin() {
           Next
         </button>
       </div>
+      {userToDelete && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h2>Delete User</h2>
+            <p>
+              Are you sure you want to delete{" "}
+              <strong>{userToDelete.email}</strong>?
+            </p>
+            <p className="warning">This action cannot be undone.</p>
+
+            <div className="modal-actions">
+              <button className="btn" onClick={() => setUserToDelete(null)}>
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={confirmDelete}>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
