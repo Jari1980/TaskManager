@@ -12,7 +12,7 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem("authToken");
 
   const publicPaths = ["/auth/registerUser", "/auth/loginUser"];
-  const isPublic = publicPaths.includes(config.url || "");
+  const isPublic = publicPaths.some((path) => config.url?.includes(path));
 
   if (!isPublic && token) {
     config.headers.Authorization = `Bearer ${token}`;

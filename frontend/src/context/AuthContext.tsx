@@ -31,8 +31,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const token = await registerUser({ name, email, password });
+    await registerUser({ name, email, password });
+    const token = await loginUser({ email, password });
+
     localStorage.setItem("authToken", token);
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    const me = await getMe();
+    setUser(me);
   };
 
   //Load user on app start
