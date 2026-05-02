@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { registerUser } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../router/routes";
 import MatrixBackground from "../components/MatrixBackground";
@@ -10,13 +9,13 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUser } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await registerUser({ name, email, password }, setUser);
+      await register(name, email, password); 
       navigate(routes.dashboard());
     } catch (err) {
       console.error(err);

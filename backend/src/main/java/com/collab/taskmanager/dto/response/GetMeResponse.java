@@ -2,5 +2,5 @@ package com.collab.taskmanager.dto.response;
 
 import com.collab.taskmanager.enums.Role;
 
-public record GetMeResponse(Long id, String email, Role role) {
+public record GetMeResponse(Long id, String name, String email, Role role) {
 }
